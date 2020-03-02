@@ -1,4 +1,4 @@
-var mongoose = require ('./bdd') // on recupere ce qui est exporté par bdd
+var mongoose = require('mongoose');
 
 
 const personalTaskSchema = mongoose.Schema({
