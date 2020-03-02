@@ -5,19 +5,19 @@ const personalTaskSchema = mongoose.Schema({
   title: String,
   address: String,
   description: String,
-  zipcode : Number,
+  zipcode : String,
   state: String, // advancement state of the task
   owner: String,
-  dateIn: Number,
-  dateOut: Number
+  dateIn: Date,
+  dateOut: Date
 });
 	
 const participantSchema = mongoose.Schema({
   ID_wed_invite: String, // generated 
+  ID_contact_app: {type: mongoose.Schema.Types.ObjectId, ref: 'users'}, // id user in the app if existing
   name: String,
   email: String,
 	accompanying : Number, // number of people comming with
-  ID_contact_app: String, // id user in the app if existing
   RSVP: Boolean,
   table: String
 });
@@ -34,7 +34,7 @@ const serviceSchema = mongoose.Schema({
   contact_name: String,
   website: String,
   address: String,
-  zipcode: String,
+  zipcode: Number,
   url_images: Array, // To show the service
   total_price: Number,
   paid_price: Number,
