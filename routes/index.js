@@ -63,5 +63,37 @@ router.post('/sign-up', async function(req, res, next) {
 });
 
 
+// route pour la connection d'un utilisateur
+
+
+router.post('/sign-in', async function (req,res,next) {
+  var result = false;
+  var message="";
+  var tokeUser="";
+  var checkUser = await userModel.findOne(
+    {email: req.body.email}
+  )
+    if (checkUser !=null) {
+      // COMPARE MOT DE PASSSE AVEC CRYPT JS
+      var hash= SHA256(req.body.password + checkUser.salt).toString(encBase64);
+      if(hash == checkUser.password)
+        {
+          result = true
+          message = "connexion réussie";
+          tokenUser = checkUser.token
+        }
+      else { 
+          result = false;
+          message = "mot de passe incorrect";
+      }
+
+    } else {
+      result=false;
+      message="nom d'utilisateur non reconnu";
+    }
+
+    res.send({result,message,tokenUser});
+})
+
 
 module.exports = router;
