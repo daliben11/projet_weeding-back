@@ -10,7 +10,7 @@ var mongoose = require ('mongoose') // on recupere ce qui est exporté par bdd
     phone: Number,
     avatar: String,
     password: String,
-    id_wedding: String,
+    id_wedding: [{ type: mongoose.Schema.Types.ObjectId, ref: 'weddings' }], // clefs etrangeres pour lui associer des mariages
     salt:String, // nécessaire pour cryptage avec crypt js (pas avec bcrypt)
     token:String,
 });
