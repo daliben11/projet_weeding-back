@@ -58,6 +58,7 @@ router.post('/sign-up', async function(req, res, next) {
   else {
     message = 'username ou mot de passe déjà pris'
   }
+  console.log(req.body)
   res.send({result,message,tokenUser});
 });
 
