@@ -35,7 +35,7 @@ const serviceSchema = mongoose.Schema({
   website: String,
   address: String,
   zipcode: Number,
-  url_images: Array, // To show the service
+  url_images: String, // A default picture of a service
   total_price: Number,
   paid_price: Number,
   payment_history: [paymentSchema]
