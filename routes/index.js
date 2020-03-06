@@ -96,4 +96,14 @@ router.post('/sign-in', async function (req,res,next) {
 })
 
 
+//route pour récupérer les info d'un profil
+
+router.post('/profile', async function(req,res,next){
+  let userProfile= await userModel.findOne({token: req.body.tokenUser})
+  console.log(userProfile)
+
+  res.send(userProfile)
+
+})
+
 module.exports = router;
