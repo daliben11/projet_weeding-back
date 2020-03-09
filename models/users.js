@@ -8,6 +8,7 @@ var mongoose = require ('mongoose') // on recupere ce qui est exporté par bdd
     zipcode: Number,
     city: String,
     phone: Number,
+    sexe: String,
     avatar: String,
     password: String,
     id_wedding: [{ type: mongoose.Schema.Types.ObjectId, ref: 'weddings' }], // clefs etrangeres pour lui associer des mariages
