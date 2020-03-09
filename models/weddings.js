@@ -38,6 +38,7 @@ const serviceSchema = mongoose.Schema({
   url_images: String, // A default picture of a service
   total_price: Number,
   paid_price: Number,
+  img: String,
   payment_history: [paymentSchema]
 });
 

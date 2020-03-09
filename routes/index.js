@@ -107,4 +107,33 @@ router.post('/profile', async function(req,res,next){
 
 })
 
+//route pour créer un évenement mariage
+
+router.post('/add-wedding', async function(req,res,next){
+  var resultMariage = false;
+  var messageMariage= "";
+  let userProfile= await userModel.findOne({token: req.body.tokenUser})
+  let newWedding = new weddingModel({
+    wedDate: req.body.date,
+    wedDescription: req.body.description,
+    budgetTotal: req.body.budget,
+    serviceProviders:[
+      { type_service:'Lieux',img:require('../../assets/lieuxmariage.jpg')},
+      { type_service:'Traiteur',img: require('../../assets/traiteurmariage.jpg') },
+      { type_service:'Photographe',img: require('../../assets/photomariage.jpeg') },
+      { type_service:'Animation',img: require('../../assets/weddingparty.jpeg' )},
+      { type_service:'Robe',img:require('../../assets/robe.jpg')},
+      { type_service:'Décorateur',img: require('../../assets/decoration.jpeg' )},
+      { type_service:'Patisserie',img: require('../../assets/gateuxmariage.jpg') },
+      { type_service:'Bijoux',img: require('../../assets/bijoux.jpg' )}
+    ]
+  });
+  
+  var weddingSaved = await newWedding.save()
+  console.log(weddingSaved)
+  resultMariage = true;
+  messageMariage = "inscription du mariage réussie";
+  res.send({resultMariage,messageMariage});
+})
+
 module.exports = router;
