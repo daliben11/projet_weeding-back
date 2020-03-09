@@ -35,6 +35,7 @@ router.post('/sign-up', async function(req, res, next) {
       userfirstname: req.body.userfirstname,
       userlastname: req.body.userlastname,
       email: req.body.email,
+      sexe: req.body.sexe,
       address: req.body.address,
       zipcode: req.body.zipcode,
       city: req.body.city,
