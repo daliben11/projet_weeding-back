@@ -145,4 +145,14 @@ router.post('/add-wedding', async function(req,res,next){
   res.send({resultMariage,messageMariage});
 })
 
+
+router.post('/budget', async function(req,res,next){
+
+var wedding = await  weddingModel.findById(req.body.id)
+console.log(wedding)
+
+res.json({wedding})
+
+})
+// 5e6762c9f5023800170451a7
 module.exports = router;
