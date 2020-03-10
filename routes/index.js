@@ -154,5 +154,6 @@ console.log(wedding)
 res.json({wedding})
 
 })
-// 5e6762c9f5023800170451a7
+
+
 module.exports = router;
