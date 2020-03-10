@@ -113,7 +113,7 @@ router.post('/add-wedding', async function(req,res,next){
   var resultMariage = false;
   var messageMariage= "";
  
-  let newWedding = new weddingModel({
+  var newWedding = new weddingModel({
     wedDate: req.body.date,
     wedDescription: req.body.description,
     budgetTotal: req.body.budget,
@@ -132,8 +132,12 @@ router.post('/add-wedding', async function(req,res,next){
   });
   
   var weddingSaved = await newWedding.save()
-  let userProfile= await userModel.findOne({token: req.body.tokenUser})
+  console.log(weddingSaved)
+
+  var userProfile= await userModel.findOne({token: req.body.tokenUser})
+
   userProfile.id_wedding.push(weddingSaved._id)
+
   userProfile.save()
   console.log(weddingSaved)
   resultMariage = true;
