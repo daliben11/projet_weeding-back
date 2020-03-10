@@ -73,7 +73,8 @@ router.post('/sign-up', async function(req, res, next) {
 router.post('/sign-in', async function (req,res,next) {
   var result = false;
   var message="";
-  var tokeUser="";
+  var tokenUser="";
+  var wedding=[];
   var checkUser = await userModel.findOne(
     {email: req.body.email}
   )
@@ -84,7 +85,9 @@ router.post('/sign-in', async function (req,res,next) {
         {
           result = true
           message = "connexion réussie";
-          tokenUser = checkUser.token
+          tokenUser = checkUser.token;
+          wedding = checkUser.id_wedding
+
         }
       else { 
           result = false;
@@ -96,7 +99,7 @@ router.post('/sign-in', async function (req,res,next) {
       message="nom d'utilisateur non reconnu";
     }
 
-    res.send({result,message,tokenUser});
+    res.send({result,message,tokenUser,wedding});
 })
 
 
