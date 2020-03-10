@@ -118,14 +118,14 @@ router.post('/add-wedding', async function(req,res,next){
     wedDescription: req.body.description,
     budgetTotal: req.body.budget,
     serviceProviders:[
-      { type_service:'Lieux', img:require('../../assets/lieuxmariage.jpg')},
-      { type_service:'Traiteur', img:require('../../assets/traiteurmariage.jpg') },
-      { type_service:'Photographe', img:require('../../assets/photomariage.jpeg') },
-      { type_service:'Animation', img:require('../../assets/weddingparty.jpeg')},
-      { type_service:'Robe', img:require('../../assets/robe.jpg')},
-      { type_service:'Décorateur', img:require('../../assets/decoration.jpeg') },
-      { type_service:'Patisserie', img:require('../../assets/gateuxmariage.jpg')},
-      { type_service:'Bijoux', img:require('../../assets/bijoux.jpg') }
+      { type_service:'Lieux', img:'./images/lieuxmariage.jpg'},
+      { type_service:'Traiteur', img:'./images/traiteurmariage.jpg' },
+      { type_service:'Photographe', img:'./images/photomariage.jpeg' },
+      { type_service:'Animation', img:'./images/weddingparty.jpeg'},
+      { type_service:'Robe', img:'./images/robe.jpg'},
+      { type_service:'Décorateur', img:'./images/decoration.jpeg' },
+      { type_service:'Patisserie', img:'./images/gateuxmariage.jpg'},
+      { type_service:'Bijoux', img:'./images/bijoux.jpg' }
     ]
   });
   
