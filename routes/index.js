@@ -86,7 +86,7 @@ router.post('/sign-in', async function (req,res,next) {
           result = true
           message = "connexion réussie";
           tokenUser = checkUser.token;
-          wedding = checkUser.id_wedding
+          wedding = checkUser.id_wedding;
 
         }
       else { 
