@@ -112,7 +112,7 @@ router.post('/profile', async function(req,res,next){
 router.post('/add-wedding', async function(req,res,next){
   var resultMariage = false;
   var messageMariage= "";
-  let userProfile= await userModel.findOne({token: req.body.tokenUser})
+ 
   let newWedding = new weddingModel({
     wedDate: req.body.date,
     wedDescription: req.body.description,
@@ -127,9 +127,14 @@ router.post('/add-wedding', async function(req,res,next){
       { type_service:'Patisserie', img:'./images/gateuxmariage.jpg'},
       { type_service:'Bijoux', img:'./images/bijoux.jpg' }
     ]
+    
+
   });
   
   var weddingSaved = await newWedding.save()
+  let userProfile= await userModel.findOne({token: req.body.tokenUser})
+  userProfile.id_wedding.push(weddingSaved._id)
+  userProfile.save()
   console.log(weddingSaved)
   resultMariage = true;
   messageMariage = "inscription du mariage réussie";
