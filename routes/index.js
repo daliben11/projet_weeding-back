@@ -5,6 +5,9 @@ var router = express.Router();
 var userModel = require('../models/users');
 var weddingModel = require ('../models/weddings');
 
+// importation de la liste de tache
+var tasks = require('../public/task')
+
 //Bcrypt config
   // const bcrypt = require('bcrypt');
   // const saltRounds = 10;
@@ -127,19 +130,32 @@ router.post('/add-wedding', async function(req,res,next){
       { type_service:'Patisserie', img:'./images/gateuxmariage.jpg'},
       { type_service:'Bijoux', img:'./images/bijoux.jpg' }
     ]
-    
 
   });
+
+  var newDate = new Date(req.body.date)
   
+  console.log('date du mariage',newDate)
+  for (let i=0;i<tasks.length;i++){
+    tasks[i].dateIn= newDate.setMonth(newDate.getMonth()-tasks[i].dateIn);
+    newDate = new Date(req.body.date)
+    tasks[i].dateOut= newDate.setMonth(newDate.getMonth()-tasks[i].dateOut);
+    newDate = new Date(req.body.date)
+    tasks[i].state=false;
+    console.log(tasks[i].dateIn)
+   
+    };
+
+  newWedding.tasksPersonal=tasks
   var weddingSaved = await newWedding.save()
-  console.log(weddingSaved)
+
 
   var userProfile= await userModel.findOne({token: req.body.tokenUser})
 
   userProfile.id_wedding.push(weddingSaved._id)
 
   userProfile.save()
-  console.log(weddingSaved)
+
   resultMariage = true;
   messageMariage = "inscription du mariage réussie";
   res.send({resultMariage,messageMariage});
