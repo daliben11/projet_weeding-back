@@ -6,7 +6,7 @@ const personalTaskSchema = mongoose.Schema({
   address: String,
   description: String,
   zipcode : String,
-  state: String, // advancement state of the task
+  state: Boolean, // advancement state of the task
   owner: String,
   dateIn: Date,
   dateOut: Date
