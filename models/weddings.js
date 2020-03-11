@@ -46,6 +46,8 @@ const serviceSchema = mongoose.Schema({
 
 const weddingSchema = mongoose.Schema({
 	wedDate: Date,
+	brideName: String,
+	groomName: String,
 	wedDescription: String,
 	budgetTotal: Number,
 	budgetPaid: Number,

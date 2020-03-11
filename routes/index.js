@@ -100,18 +100,46 @@ router.post('/sign-in', async function (req,res,next) {
 //route pour récupérer les info d'un profil
 
 router.post('/profile', async function(req,res,next){
-  let userProfile= await userModel.findOne({token: req.body.tokenUser})
-  console.log(userProfile)
 
-  res.send(userProfile)
+  let userProfile= await userModel.findOne({token: req.body.tokenUser});
+  console.log( userProfile );
 
-})
+  res.send( userProfile );
+});
+
+
+
+// route pour éditer les infos d'un utilisateur
+
+router.put('/profile', async function(req,res,next){
+
+	let entry = Object.entries( req.body );
+	
+	var obj={};
+	entry.forEach( (el, i) => {
+		if ( el[0] !== 'token' ) {
+			obj[ el[0] ] = el[1];
+		}
+	});
+
+	//console.log('lol ', obj);
+	
+	
+  let response = await userModel.updateOne({token: req.body.token}, obj );
+  
+  //console.log( response );
+
+  if (response.ok) { res.send( response ) }
+  else { res.send( {error: 'sans modification'} ) }
+
+});
+
 
 //route pour créer un évenement mariage
 
 router.post('/add-wedding', async function(req,res,next){
   var resultMariage = false;
-  var messageMariage= "";
+  var messageMariage = "";
  
   var newWedding = new weddingModel({
     wedDate: req.body.date,
