@@ -29,7 +29,7 @@ router.post('/sign-up', async function(req, res, next) {
   let result = false;
   let message= "";
   let tokenUser;
-  let userAlreadyExist = await userModel.findOne({email: req.body.email}) 
+  let userAlreadyExist = await userModel.findOne({$or:[{email: req.body.email,userfirstname: req.body.userfirstname}]}) 
   if(userAlreadyExist==null) {
 
   // HASH MOT DE PASSSE AVEC CRYPT JS
@@ -73,7 +73,8 @@ router.post('/sign-up', async function(req, res, next) {
 router.post('/sign-in', async function (req,res,next) {
   var result = false;
   var message="";
-  var tokeUser="";
+  var tokenUser="";
+  var wedding=[];
   var checkUser = await userModel.findOne(
     {email: req.body.email}
   )
@@ -84,7 +85,9 @@ router.post('/sign-in', async function (req,res,next) {
         {
           result = true
           message = "connexion réussie";
-          tokenUser = checkUser.token
+          tokenUser = checkUser.token;
+          wedding = checkUser.id_wedding;
+
         }
       else { 
           result = false;
@@ -96,25 +99,53 @@ router.post('/sign-in', async function (req,res,next) {
       message="nom d'utilisateur non reconnu";
     }
 
-    res.send({result,message,tokenUser});
+    res.send({result,message,tokenUser,wedding});
 })
 
 
 //route pour récupérer les info d'un profil
 
 router.post('/profile', async function(req,res,next){
-  let userProfile= await userModel.findOne({token: req.body.tokenUser})
-  console.log(userProfile)
 
-  res.send(userProfile)
+  let userProfile= await userModel.findOne({token: req.body.tokenUser});
+  console.log( userProfile );
 
-})
+  res.send( userProfile );
+});
+
+
+
+// route pour éditer les infos d'un utilisateur
+
+router.put('/profile', async function(req,res,next){
+
+	let entry = Object.entries( req.body );
+	
+	var obj={};
+	entry.forEach( (el, i) => {
+		if ( el[0] !== 'token' ) {
+			obj[ el[0] ] = el[1];
+		}
+	});
+
+	//console.log('lol ', obj);
+	
+	
+  let response = await userModel.updateOne({token: req.body.token}, obj );
+  
+  //console.log( response );
+
+  if (response.ok) { res.send( response ) }
+  else { res.send( {error: 'sans modification'} ) }
+
+});
+
 
 //route pour créer un évenement mariage
 
 router.post('/add-wedding', async function(req,res,next){
   var resultMariage = false;
-  var messageMariage= "";
+  var messageMariage = "";
  
   var newWedding = new weddingModel({
     wedDate: req.body.date,
