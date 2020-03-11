@@ -171,5 +171,29 @@ res.json({wedding})
 
 })
 
+router.post ('/tasks', async function(req,res,next){
+
+  var wedding = await  weddingModel.findById(req.body.id)
+  console.log("salut", wedding)
+  console.log(req.body.index);
+  if(req.body.index !== 'null' && wedding.tasksPersonal[req.body.index].state == false ) {
+  wedding.tasksPersonal[req.body.index].state = true
+  console.log(wedding.tasksPersonal[req.body.index].state)
+  console.log(req.body);
+  wedding.save()
+
+
+
+}  else if ( req.body.index !== 'null' && wedding.tasksPersonal[req.body.index].state == true ){
+  wedding.tasksPersonal[req.body.index].state = false
+  wedding.save()
+}
+ 
+ 
+ 
+  
+  res.json({wedding})
+})
+
 
 module.exports = router;
