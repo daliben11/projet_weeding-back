@@ -5,6 +5,9 @@ var router = express.Router();
 var userModel = require('../models/users');
 var weddingModel = require ('../models/weddings');
 
+// importation de la liste de tache
+var tasks = require('../public/task')
+
 //Bcrypt config
   // const bcrypt = require('bcrypt');
   // const saltRounds = 10;
@@ -26,7 +29,7 @@ router.post('/sign-up', async function(req, res, next) {
   let result = false;
   let message= "";
   let tokenUser;
-  let userAlreadyExist = await userModel.findOne({email: req.body.email}) 
+  let userAlreadyExist = await userModel.findOne({$or:[{email: req.body.email,userfirstname: req.body.userfirstname}]}) 
   if(userAlreadyExist==null) {
 
   // HASH MOT DE PASSSE AVEC CRYPT JS
@@ -70,7 +73,8 @@ router.post('/sign-up', async function(req, res, next) {
 router.post('/sign-in', async function (req,res,next) {
   var result = false;
   var message="";
-  var tokeUser="";
+  var tokenUser="";
+  var wedding=[];
   var checkUser = await userModel.findOne(
     {email: req.body.email}
   )
@@ -81,7 +85,9 @@ router.post('/sign-in', async function (req,res,next) {
         {
           result = true
           message = "connexion réussie";
-          tokenUser = checkUser.token
+          tokenUser = checkUser.token;
+          wedding = checkUser.id_wedding;
+
         }
       else { 
           result = false;
@@ -93,7 +99,7 @@ router.post('/sign-in', async function (req,res,next) {
       message="nom d'utilisateur non reconnu";
     }
 
-    res.send({result,message,tokenUser});
+    res.send({result,message,tokenUser,wedding});
 })
 
 
@@ -155,22 +161,46 @@ router.post('/add-wedding', async function(req,res,next){
       { type_service:'Patisserie', img:'./images/gateuxmariage.jpg'},
       { type_service:'Bijoux', img:'./images/bijoux.jpg' }
     ]
-    
 
   });
+
+  var newDate = new Date(req.body.date)
   
+  console.log('date du mariage',newDate)
+  for (let i=0;i<tasks.length;i++){
+    tasks[i].dateIn= newDate.setMonth(newDate.getMonth()-tasks[i].dateIn);
+    newDate = new Date(req.body.date)
+    tasks[i].dateOut= newDate.setMonth(newDate.getMonth()-tasks[i].dateOut);
+    newDate = new Date(req.body.date)
+    tasks[i].state=false;
+    console.log(tasks[i].dateIn)
+   
+    };
+
+  newWedding.tasksPersonal=tasks
   var weddingSaved = await newWedding.save()
-  console.log(weddingSaved)
+
 
   var userProfile= await userModel.findOne({token: req.body.tokenUser})
 
   userProfile.id_wedding.push(weddingSaved._id)
 
   userProfile.save()
-  console.log(weddingSaved)
+
   resultMariage = true;
   messageMariage = "inscription du mariage réussie";
   res.send({resultMariage,messageMariage});
 })
+
+
+router.post('/budget', async function(req,res,next){
+
+var wedding = await  weddingModel.findById(req.body.id)
+console.log(wedding)
+
+res.json({wedding})
+
+})
+
 
 module.exports = router;

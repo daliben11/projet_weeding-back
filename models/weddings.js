@@ -6,7 +6,7 @@ const personalTaskSchema = mongoose.Schema({
   address: String,
   description: String,
   zipcode : String,
-  state: String, // advancement state of the task
+  state: Boolean, // advancement state of the task
   owner: String,
   dateIn: Date,
   dateOut: Date
@@ -17,7 +17,7 @@ const participantSchema = mongoose.Schema({
   ID_contact_app: {type: mongoose.Schema.Types.ObjectId, ref: 'users'}, // id user in the app if existing
   name: String,
   email: String,
-	accompanying : Number, // number of people comming with
+	accompanying : Number, // number of people comming with   //
   RSVP: Boolean,
   table: String
 });
@@ -35,10 +35,9 @@ const serviceSchema = mongoose.Schema({
   website: String,
   address: String,
   zipcode: Number,
-  url_images: String, // A default picture of a service
   total_price: Number,
   paid_price: Number,
-  img: String,
+  img: String,  // A default picture of a service
   payment_history: [paymentSchema]
 });
 
