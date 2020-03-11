@@ -29,7 +29,7 @@ router.post('/sign-up', async function(req, res, next) {
   let result = false;
   let message= "";
   let tokenUser;
-  let userAlreadyExist = await userModel.findOne({email: req.body.email}) 
+  let userAlreadyExist = await userModel.findOne({$or:[{email: req.body.email,userfirstname: req.body.userfirstname}]}) 
   if(userAlreadyExist==null) {
 
   // HASH MOT DE PASSSE AVEC CRYPT JS
