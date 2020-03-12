@@ -202,15 +202,15 @@ res.json({wedding})
 
 })
 
+
 router.post ('/tasks', async function(req,res,next){
 
   var wedding = await  weddingModel.findById(req.body.id)
-  console.log("salut", wedding)
+
   console.log(req.body.index);
   if(req.body.index !== 'null' && wedding.tasksPersonal[req.body.index].state == false ) {
   wedding.tasksPersonal[req.body.index].state = true
   console.log(wedding.tasksPersonal[req.body.index].state)
-  console.log(req.body);
   wedding.save()
 
 
@@ -219,11 +219,20 @@ router.post ('/tasks', async function(req,res,next){
   wedding.tasksPersonal[req.body.index].state = false
   wedding.save()
 }
- 
- 
- 
+
+var avancement=0
+var count = 0
+  for (let i = 0; i<wedding.tasksPersonal.length;i++){
+    if( wedding.tasksPersonal[i].state==true){
+      count=count+1
+    } 
+  }
   
-  res.json({wedding})
+ 
+  avancement=count/wedding.tasksPersonal.length
+
+  
+  res.json({wedding,count,avancement})
 })
 
 
