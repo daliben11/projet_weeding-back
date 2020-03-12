@@ -274,14 +274,48 @@ var count = 0
 
   
   res.json({wedding,count,avancement})
+
+  
 })
 
 
 
 
+router.post ('/guests', async function(req,res,next){
 
 
-/// Ajout de l-ownership d-un mariage
+
+  var wedding = await  weddingModel.findById(req.body.id)
+
+
+  res.json({weddingParticipants: wedding.participants})
+
+})
+
+
+router.post ('/addGuests', async function(req,res,next){
+
+
+  
+    var wedding = await  weddingModel.findById(req.body.id)
+  
+    
+    var newGuest = wedding.participants.push({
+      nom:req.body.nom, 
+      prenom:req.body.prenom, 
+      email:req.body.email,
+    })
+  
+    var guestSave = await wedding.save();
+   console.log("ba alorss", guestSave)
+  
+  
+    res.json({weddingParticipants: guestSave.participants})
+
+  })
+  
+
+  /// Ajout de l-ownership d-un mariage
 /*
 /// ajout de la propriété ownership aux mariages suivants
 		id=
@@ -290,16 +324,10 @@ var count = 0
 */
 router.post('/ajoutTruc', async function(req,res,next){
 
-var wedding = await weddingModel.updateOne( {id:req.body.id}, {ownership: '5e68c7b6a8766c49b12d8525'} );
-console.log(wedding, `{id:${req.body.id}}, {ownership: '5e68c7b6a8766c49b12d8525'}`);
-
-res.json({wedding})
-
+  var wedding = await weddingModel.updateOne( {id:req.body.id}, {ownership: '5e68c7b6a8766c49b12d8525'} );
+  console.log(wedding, `{id:${req.body.id}}, {ownership: '5e68c7b6a8766c49b12d8525'}`);
+  
+  res.json({wedding})
 })
-
-
-
-
-
 
 module.exports = router;
