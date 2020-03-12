@@ -196,11 +196,31 @@ router.post('/add-wedding', async function(req,res,next){
 router.post('/budget', async function(req,res,next){
 
 var wedding = await  weddingModel.findById(req.body.id)
-console.log(wedding)
 
-res.json({wedding})
+let budget=wedding.budgetTotal
+let prestataire=wedding.serviceProviders
+
+
+res.json({prestataire,budget})
 
 })
+
+router.post('/addbudget', async function(req,res,next){
+
+  var wedding = await  weddingModel.findById(req.body.id)
+  
+  
+  
+  var weddingSaved = wedding.serviceProviders[req.body.index].payment_history.push({price:req.body.montant,date:req.body.date})
+  wedding.save();
+  
+  var budget=weddingSaved.budgetTotal
+  var  prestataire=weddingSaved.serviceProviders
+  
+  res.json({prestataire,budget})
+  
+  })
+
 
 
 router.post ('/tasks', async function(req,res,next){
