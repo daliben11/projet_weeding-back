@@ -148,6 +148,7 @@ router.post('/add-wedding', async function(req,res,next){
   var messageMariage = "";
  
   var newWedding = new weddingModel({
+  	ownership: true,
     wedDate: req.body.date,
     wedDescription: req.body.description,
     budgetTotal: req.body.budget,
@@ -168,16 +169,16 @@ router.post('/add-wedding', async function(req,res,next){
   
   console.log('date du mariage',newDate)
   for (let i=0;i<tasks.length;i++){
-    tasks[i].dateIn= newDate.setMonth(newDate.getMonth()-tasks[i].dateIn);
-    newDate = new Date(req.body.date)
-    tasks[i].dateOut= newDate.setMonth(newDate.getMonth()-tasks[i].dateOut);
-    newDate = new Date(req.body.date)
-    tasks[i].state=false;
-    console.log(tasks[i].dateIn)
+    tasks[i].dateIn = newDate.setMonth(newDate.getMonth()-tasks[i].dateIn);
+    newDate = new Date(req.body.date);
+    tasks[i].dateOut = newDate.setMonth(newDate.getMonth()-tasks[i].dateOut);
+    newDate = new Date(req.body.date);
+    tasks[i].state = false;
+    //console.log(tasks[i].dateIn)
    
     };
 
-  newWedding.tasksPersonal=tasks
+  newWedding.tasksPersonal = tasks
   var weddingSaved = await newWedding.save()
 
 
@@ -186,11 +187,24 @@ router.post('/add-wedding', async function(req,res,next){
   userProfile.id_wedding.push(weddingSaved._id)
 
   userProfile.save()
+  
+  // update status on user info
+  let userUpdate = await userModel.updateOne({token: req.body.tokenUser},{status:'admin'});
 
   resultMariage = true;
   messageMariage = "inscription du mariage réussie";
   res.send({resultMariage,messageMariage});
 })
+
+router.post('/getwedding', async function(req,res,next){
+
+	var wedding = await weddingModel.findById(req.body.id);
+	console.log(wedding)
+
+	res.json({wedding})
+
+})
+
 
 
 router.post('/budget', async function(req,res,next){

@@ -44,6 +44,7 @@ const serviceSchema = mongoose.Schema({
 
 
 const weddingSchema = mongoose.Schema({
+	ownership: Boolean,
 	wedDate: Date,
 	brideName: String,
 	groomName: String,
