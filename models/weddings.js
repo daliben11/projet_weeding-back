@@ -44,7 +44,9 @@ const serviceSchema = mongoose.Schema({
 
 
 const weddingSchema = mongoose.Schema({
+	ownership: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
 	wedDate: Date,
+	wedCity: String,
 	brideName: String,
 	groomName: String,
 	wedDescription: String,
