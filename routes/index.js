@@ -217,4 +217,37 @@ res.json({wedding})
 })
 
 
+router.post ('/tasks', async function(req,res,next){
+
+  var wedding = await  weddingModel.findById(req.body.id)
+
+  console.log(req.body.index);
+  if(req.body.index !== 'null' && wedding.tasksPersonal[req.body.index].state == false ) {
+  wedding.tasksPersonal[req.body.index].state = true
+  console.log(wedding.tasksPersonal[req.body.index].state)
+  wedding.save()
+
+
+
+}  else if ( req.body.index !== 'null' && wedding.tasksPersonal[req.body.index].state == true ){
+  wedding.tasksPersonal[req.body.index].state = false
+  wedding.save()
+}
+
+var avancement=0
+var count = 0
+  for (let i = 0; i<wedding.tasksPersonal.length;i++){
+    if( wedding.tasksPersonal[i].state==true){
+      count=count+1
+    } 
+  }
+  
+ 
+  avancement=count/wedding.tasksPersonal.length
+
+  
+  res.json({wedding,count,avancement})
+})
+
+
 module.exports = router;
