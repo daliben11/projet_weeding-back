@@ -146,9 +146,14 @@ router.put('/profile', async function(req,res,next){
 router.post('/add-wedding', async function(req,res,next){
   var resultMariage = false;
   var messageMariage = "";
+ 	
+ 	var userProfile = await userModel.findOne( {token: req.body.tokenUser} );
+ 	
+ 	// let uID = userProfile.id ; // c'est l'id dan bdd de l'utilisateur pour dire qui est le owner du mariage
+ 	//console.log('id',uID)
  
   var newWedding = new weddingModel({
-  	ownership: true,
+  	ownership: userProfile.id,
     wedDate: req.body.date,
     wedDescription: req.body.description,
     budgetTotal: req.body.budget,
@@ -167,7 +172,7 @@ router.post('/add-wedding', async function(req,res,next){
 
   var newDate = new Date(req.body.date)
   
-  console.log('date du mariage',newDate)
+  //console.log('date du mariage',newDate)
   for (let i=0;i<tasks.length;i++){
     tasks[i].dateIn = newDate.setMonth(newDate.getMonth()-tasks[i].dateIn);
     newDate = new Date(req.body.date);
@@ -181,35 +186,37 @@ router.post('/add-wedding', async function(req,res,next){
   newWedding.tasksPersonal = tasks
   var weddingSaved = await newWedding.save()
 
-
-  var userProfile= await userModel.findOne({token: req.body.tokenUser})
+// je mets cette opération plus haut, car besoin du id de l'utilisateur
+  //var userProfile= await userModel.findOne({token: req.body.tokenUser}) 
 
   userProfile.id_wedding.push(weddingSaved._id)
 
   userProfile.save()
   
   // update status on user info
-  let userUpdate = await userModel.updateOne({token: req.body.tokenUser},{status:'admin'});
+  let userUpdate = await userModel.updateOne({token: req.body.tokenUser}, {status:'admin'});
 
   resultMariage = true;
   messageMariage = "inscription du mariage réussie";
   res.send({resultMariage,messageMariage});
 })
 
+
+// pour prendre les infos sur un mariage avec son id
 router.post('/getwedding', async function(req,res,next){
+	
+	//console.log('recoit getwedding ', req.body);
+	var wedding = await weddingModel.findById( req.body.id );
 
-	var wedding = await weddingModel.findById(req.body.id);
-	console.log(wedding)
+	res.json({wedding});
 
-	res.json({wedding})
-
-})
+});
 
 
 
 router.post('/budget', async function(req,res,next){
 
-var wedding = await  weddingModel.findById(req.body.id)
+var wedding = await weddingModel.findById(req.body.id)
 console.log(wedding)
 
 res.json({wedding})
@@ -248,6 +255,31 @@ var count = 0
   
   res.json({wedding,count,avancement})
 })
+
+
+
+
+
+
+/// Ajout de l-ownership d-un mariage
+/*
+/// ajout de la propriété ownership aux mariages suivants
+		id=
+		5e67be5ac820c000174ee417 // 
+		5e6911571052b2522818586e // Yo
+*/
+router.post('/ajoutTruc', async function(req,res,next){
+
+var wedding = await weddingModel.updateOne( {id:req.body.id}, {ownership: '5e68c7b6a8766c49b12d8525'} );
+console.log(wedding, `{id:${req.body.id}}, {ownership: '5e68c7b6a8766c49b12d8525'}`);
+
+res.json({wedding})
+
+})
+
+
+
+
 
 
 module.exports = router;
