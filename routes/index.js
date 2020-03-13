@@ -202,12 +202,13 @@ router.post('/add-wedding', async function(req,res,next){
 })
 
 
+
+
 // pour prendre les infos sur un mariage avec son id
 router.post('/getwedding', async function(req,res,next){
 	
 	//console.log('recoit getwedding ', req.body);
 	var wedding = await weddingModel.findById( req.body.id );
-
 	res.json({wedding});
 
 });
@@ -258,6 +259,30 @@ var count = 0
 
 
 
+
+
+//// route pour éditer les infos d'une prestation
+
+router.put('/presta', async function(req,res,next){
+
+	let entry = Object.entries( req.body );
+	
+	var obj={};
+	entry.forEach( (el, i) => {
+		if ( el[0] !== 'token' ) {
+			obj[ el[0] ] = el[1];
+		}
+	});
+	
+	
+  let response = await weddingModel.updateOne({id: req.body.id_wedding}, obj );
+  
+  //console.log( response );
+
+  if (response.ok) { res.send( response ) }
+  else { res.send( {error: 'sans modification'} ) }
+
+});
 
 
 
