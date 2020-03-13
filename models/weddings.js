@@ -15,7 +15,8 @@ const personalTaskSchema = mongoose.Schema({
 const participantSchema = mongoose.Schema({
   ID_wed_invite: String, // generated 
   ID_contact_app: {type: mongoose.Schema.Types.ObjectId, ref: 'users'}, // id user in the app if existing
-  name: String,
+  nom: String,
+  prenom: String,
   email: String,
 	accompanying : Number, // number of people comming with   //
   RSVP: Boolean,

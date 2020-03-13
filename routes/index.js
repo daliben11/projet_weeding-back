@@ -217,12 +217,32 @@ router.post('/getwedding', async function(req,res,next){
 
 router.post('/budget', async function(req,res,next){
 
-var wedding = await weddingModel.findById(req.body.id)
-console.log(wedding)
+var wedding = await  weddingModel.findById(req.body.id)
 
-res.json({wedding})
+let budget=wedding.budgetTotal
+let prestataire=wedding.serviceProviders
+
+
+res.json({prestataire,budget})
 
 })
+
+router.post('/addbudget', async function(req,res,next){
+
+  var wedding = await  weddingModel.findById(req.body.id)
+  
+  
+  
+  var weddingSaved = wedding.serviceProviders[req.body.index].payment_history.push({price:req.body.montant,date:req.body.date})
+  wedding.save();
+  
+  var budget=weddingSaved.budgetTotal
+  var  prestataire=weddingSaved.serviceProviders
+  
+  res.json({prestataire,budget})
+  
+  })
+
 
 
 router.post ('/tasks', async function(req,res,next){
@@ -255,11 +275,14 @@ var count = 0
 
   
   res.json({wedding,count,avancement})
+
+  
 })
 
 
 
 
+router.post ('/guests', async function(req,res,next){
 
 //// route pour éditer les infos d'une prestation
 
@@ -286,7 +309,38 @@ router.put('/presta', async function(req,res,next){
 
 
 
-/// Ajout de l-ownership d-un mariage
+
+  var wedding = await  weddingModel.findById(req.body.id)
+
+
+  res.json({weddingParticipants: wedding.participants})
+
+})
+
+
+router.post ('/addGuests', async function(req,res,next){
+
+
+  
+    var wedding = await  weddingModel.findById(req.body.id)
+  
+    
+    var newGuest = wedding.participants.push({
+      nom:req.body.nom, 
+      prenom:req.body.prenom, 
+      email:req.body.email,
+    })
+  
+    var guestSave = await wedding.save();
+   console.log("ba alorss", guestSave)
+  
+  
+    res.json({weddingParticipants: guestSave.participants})
+
+  })
+  
+
+  /// Ajout de l-ownership d-un mariage
 /*
 /// ajout de la propriété ownership aux mariages suivants
 		id=
@@ -295,16 +349,10 @@ router.put('/presta', async function(req,res,next){
 */
 router.post('/ajoutTruc', async function(req,res,next){
 
-var wedding = await weddingModel.updateOne( {id:req.body.id}, {ownership: '5e68c7b6a8766c49b12d8525'} );
-console.log(wedding, `{id:${req.body.id}}, {ownership: '5e68c7b6a8766c49b12d8525'}`);
-
-res.json({wedding})
-
+  var wedding = await weddingModel.updateOne( {id:req.body.id}, {ownership: '5e68c7b6a8766c49b12d8525'} );
+  console.log(wedding, `{id:${req.body.id}}, {ownership: '5e68c7b6a8766c49b12d8525'}`);
+  
+  res.json({wedding})
 })
-
-
-
-
-
 
 module.exports = router;
